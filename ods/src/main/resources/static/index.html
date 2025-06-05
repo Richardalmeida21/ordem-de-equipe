@@ -2,17 +2,134 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ordem de Trabalho</title>
+  <style>
+    :root {
+      --primary-color: #4361ee;
+      --secondary-color: #3f37c9;
+      --accent-color: #4cc9f0;
+      --background-color: #f8f9fa;
+      --text-color: #333;
+      --success-color: #4CAF50;
+      --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 2px solid var(--accent-color);
+    }
+    
+    h2 {
+      color: var(--secondary-color);
+      margin-top: 25px;
+    }
+    
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: var(--card-shadow);
+      display: block;
+      margin: 20px auto;
+    }
+    
+    button:hover {
+      background-color: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    #responsavel {
+      background-color: var(--success-color);
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    
+    #responsavel:not(:empty) {
+      opacity: 1;
+    }
+    
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 30px;
+    }
+    
+    li {
+      background-color: white;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: var(--card-shadow);
+      position: relative;
+      transition: transform 0.2s;
+    }
+    
+    li:hover {
+      transform: translateX(5px);
+    }
+    
+    li::before {
+      content: "👤";
+      margin-right: 10px;
+    }
+    
+    .container {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: var(--card-shadow);
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Ordem de Trabalho</h1>
-  <button onclick="atribuirChamado()">Pegar Chamado</button>
-  <h2 id="responsavel"></h2>
-  <ul id="listaEquipe"></ul>
+  <div class="container">
+    <h1>Ordem de Trabalho</h1>
+    <button onclick="atribuirChamado()">Pegar Chamado</button>
+    <h2 id="responsavel"></h2>
+    <ul id="listaEquipe"></ul>
+  </div>
 
   <script>
     async function atualizarLista() {
-      const res = await fetch("http://localhost:8080/api/ordem");
+      const res = await fetch("/api/ordem");
       const lista = await res.json();
 
       const ul = document.getElementById("listaEquipe");
@@ -25,7 +142,7 @@
     }
 
     async function atribuirChamado() {
-      const res = await fetch("http://localhost:8080/api/chamado", {
+      const res = await fetch("/api/chamado", {
         method: "POST"
       });
       const nome = await res.text();
