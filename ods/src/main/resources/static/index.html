@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ordem de Trabalho</title>
+</head>
+<body>
+  <h1>Ordem de Trabalho</h1>
+  <button onclick="atribuirChamado()">Pegar Chamado</button>
+  <h2 id="responsavel"></h2>
+  <ul id="listaEquipe"></ul>
+
+  <script>
+    async function atualizarLista() {
+      const res = await fetch("http://localhost:8080/api/ordem");
+      const lista = await res.json();
+
+      const ul = document.getElementById("listaEquipe");
+      ul.innerHTML = "";
+      lista.forEach(nome => {
+        const li = document.createElement("li");
+        li.textContent = nome;
+        ul.appendChild(li);
+      });
+    }
+
+    async function atribuirChamado() {
+      const res = await fetch("http://localhost:8080/api/chamado", {
+        method: "POST"
+      });
+      const nome = await res.text();
+      document.getElementById("responsavel").textContent =
+        `Chamado atribuído a: ${nome}`;
+      atualizarLista();
+    }
+
+    atualizarLista(); // Atualiza ao abrir a página
+  </script>
+</body>
+</html>
