@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: ods-api
+    env: docker
+    region: ohio
+    plan: free
+    branch: main
+    healthCheckPath: /actuator/health
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+    buildCommand: docker build -t ods-api .
+    startCommand: docker run -p 8080:8080 ods-api
